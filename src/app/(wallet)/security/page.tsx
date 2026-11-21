@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Loader2, Lock, ShieldAlert, ShieldCheck, Trash2 } from "lucide-react";
+import { Check, Copy, Eye, EyeOff, Loader2, Lock, ShieldAlert, ShieldCheck, Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/layout/ModulePlaceholder";
 import { ApprovalManager } from "@/components/wallet/ApprovalManager";
 import { PhraseGrid } from "@/components/wallet/Onboarding";
@@ -32,6 +32,18 @@ function RevealPhrase() {
   const [busy, setBusy] = useState(false);
   const [phrase, setPhrase] = useState<string | null>(null);
   const [revealed, setRevealed] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const copyPhrase = async () => {
+    if (!phrase) return;
+    try {
+      await navigator.clipboard.writeText(phrase);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setError("Copy failed — your browser blocked clipboard access. Write the words down instead.");
+    }
+  };
 
   if (!hasMnemonic) {
     return (
@@ -48,6 +60,7 @@ function RevealPhrase() {
       setError(null);
       setPhrase(null);
       setRevealed(false);
+      setCopied(false);
     }
     setOpen(next);
   };
@@ -95,6 +108,13 @@ function RevealPhrase() {
               )}
             </div>
           )}
+          {phrase && revealed && (
+            <p className="flex items-start gap-2 rounded-xl bg-warning/10 p-3 text-xs leading-relaxed text-warning">
+              <ShieldAlert className="mt-0.5 size-4 shrink-0" />
+              Copy it only into a safe, private place. Never paste your phrase into a website, chat
+              or email — anyone with these words controls your wallet.
+            </p>
+          )}
           <DialogFooter>
             <Button variant="ghost" onClick={() => close(false)}>
               {phrase ? "Done" : "Cancel"}
@@ -123,6 +143,12 @@ function RevealPhrase() {
               <Button variant="ghost" onClick={() => setRevealed((r) => !r)}>
                 {revealed ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                 {revealed ? "Hide" : "Show"}
+              </Button>
+            )}
+            {phrase && revealed && (
+              <Button variant="gradient" onClick={copyPhrase}>
+                {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
+                {copied ? "Copied" : "Copy phrase"}
               </Button>
             )}
           </DialogFooter>
