@@ -8,6 +8,7 @@ import {
   ArrowDownToLine,
   ArrowUpFromLine,
   Coins,
+  Globe2,
   History,
   LayoutDashboard,
   Network,
@@ -21,6 +22,7 @@ import { RSLogo } from "@/components/brand/RSLogo";
 import { NetworkSelector } from "@/components/wallet/NetworkSelector";
 import { BuiltinChip } from "@/components/wallet/BuiltinChip";
 import { ChainProvider, useRsChain } from "@/components/wallet/ChainProvider";
+import { DappsProvider } from "@/components/wallet/DappsProvider";
 import { cn } from "@/lib/utils";
 
 /** Shown when the connected external wallet sits on a chain RS WALLET doesn't support. */
@@ -62,6 +64,7 @@ const NAV = [
   { href: "/send", label: "Send", icon: ArrowUpFromLine },
   { href: "/receive", label: "Receive", icon: ArrowDownToLine },
   { href: "/swap", label: "Swap", icon: ArrowLeftRight },
+  { href: "/dapps", label: "dApps", icon: Globe2 },
   { href: "/activity", label: "Activity", icon: History },
 ] as const;
 
@@ -113,6 +116,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <ChainProvider>
+      <DappsProvider>
       <div className="mx-auto flex min-h-dvh w-full max-w-[1400px]">
         {/* Desktop sidebar */}
         <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-border/70 px-4 py-6 lg:flex">
@@ -188,6 +192,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </nav>
         </div>
       </div>
+      </DappsProvider>
     </ChainProvider>
   );
 }

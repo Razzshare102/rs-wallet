@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowDown, ArrowLeftRight, ArrowUp, Check, Copy, History } from "lucide-react";
+import { ArrowDown, ArrowLeftRight, ArrowUp, Check, Copy, Globe2, History } from "lucide-react";
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -163,10 +163,11 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick actions */}
-      <div className="mt-8 flex items-start justify-center gap-7 sm:gap-9">
+      <div className="mt-8 flex items-start justify-center gap-5 sm:gap-7">
         <QuickAction href="/send" label="Send" icon={ArrowUp} />
         <QuickAction href="/receive" label="Receive" icon={ArrowDown} />
         <QuickAction href="/swap" label="Swap" icon={ArrowLeftRight} />
+        <QuickAction href="/dapps" label="dApps" icon={Globe2} />
         <QuickAction href="/activity" label="History" icon={History} />
       </div>
 
