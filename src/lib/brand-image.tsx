@@ -1,17 +1,15 @@
 import { ImageResponse } from "next/og";
 
+import { LOGO_JPEG_DATA_URI } from "@/lib/logo-data";
+
 /**
  * RS WALLET brand mark — the single source of truth for generated brand
  * images (Open Graph / Twitter cards, apple touch icon). The artwork is
- * the same original monogram used by `src/components/brand/RSLogo.tsx`
- * and `src/app/icon.svg`: monoline R + S strokes on a dark rounded
- * square, Trust-blue gradient.
+ * the logo approved by Razz on 2026-11-21 (interlocked RS with the
+ * Trust-blue gradient wave on black), shared with
+ * `src/components/brand/RSLogo.tsx` via `src/lib/logo-data.ts`.
  */
-export const BRAND_MARK_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none"><defs><linearGradient id="g" x1="6" y1="6" x2="58" y2="58" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#6e63ff"/><stop offset="48%" stop-color="#0500ff"/><stop offset="100%" stop-color="#0091ff"/></linearGradient></defs><rect x="3" y="3" width="58" height="58" rx="16" fill="#0a0a10" stroke="url(#g)" stroke-width="2.5"/><path d="M20 44V20h8.2a7 7 0 0 1 0 14H20m8.5 0L36 44" stroke="url(#g)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M49 26.5c-.8-2.2-2.8-3.4-5.4-3.4-3.3 0-5.6 1.9-5.6 4.6 0 6.4 11.4 3.4 11.4 9.9 0 2.8-2.5 4.7-6 4.7-2.9 0-5.2-1.4-6.1-3.9" stroke="url(#g)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-
-export const brandMarkDataUri = `data:image/svg+xml;base64,${Buffer.from(
-  BRAND_MARK_SVG,
-).toString("base64")}`;
+export const brandMarkDataUri = LOGO_JPEG_DATA_URI;
 
 /** 1200×630 share image: mark + wordmark on the brand's dark navy. */
 export function brandShareImage() {
