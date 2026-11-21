@@ -26,9 +26,9 @@ export function RSLogo({
       >
         <defs>
           <linearGradient id="rs-grad" x1="6" y1="6" x2="58" y2="58" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#a78bfa" />
-            <stop offset="48%" stopColor="#7c5cff" />
-            <stop offset="100%" stopColor="#2f81f7" />
+            <stop offset="0%" stopColor="#6e63ff" />
+            <stop offset="48%" stopColor="#0500ff" />
+            <stop offset="100%" stopColor="#0091ff" />
           </linearGradient>
         </defs>
         <rect x="3" y="3" width="58" height="58" rx="16" fill="#0b0f1c" stroke="url(#rs-grad)" strokeWidth="2.5" />

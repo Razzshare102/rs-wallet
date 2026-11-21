@@ -98,7 +98,7 @@ function NavLink({
       className={cn(
         "flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors",
         active
-          ? "bg-primary/15 text-foreground shadow-[inset_0_0_0_1px_rgba(124,92,255,0.35)]"
+          ? "bg-primary/15 text-foreground shadow-[inset_0_0_0_1px_rgba(5,0,255,0.45)]"
           : "text-muted-foreground hover:bg-secondary hover:text-foreground",
       )}
     >
@@ -157,18 +157,28 @@ export function AppShell({ children }: { children: ReactNode }) {
 
           <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-28 pt-6 sm:px-6 lg:pb-10">{children}</main>
 
-          {/* Mobile bottom tabs */}
-          <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/90 backdrop-blur-xl lg:hidden">
+          {/* Mobile bottom tabs — Trust Wallet style, Swap raised in the centre */}
+          <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/95 backdrop-blur-xl lg:hidden">
             <div className="mx-auto grid max-w-md grid-cols-5">
               {MOBILE_TABS.map(({ href, label, icon: Icon }) => {
                 const active = isActive(href);
+                if (href === "/swap") {
+                  return (
+                    <Link key={href} href={href} className="flex flex-col items-center gap-1 pb-2.5 pt-1 text-[10px] font-medium text-muted-foreground">
+                      <span className="flex size-12 -translate-y-3 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/40">
+                        <Icon className="size-5" />
+                      </span>
+                      <span className="-mt-2.5">{label}</span>
+                    </Link>
+                  );
+                }
                 return (
                   <Link
                     key={href}
                     href={href}
                     className={cn(
                       "flex flex-col items-center gap-1 py-2.5 text-[10px] font-medium",
-                      active ? "text-primary" : "text-muted-foreground",
+                      active ? "text-accent" : "text-muted-foreground",
                     )}
                   >
                     <Icon className="size-5" />

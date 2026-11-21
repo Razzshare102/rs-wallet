@@ -27,7 +27,7 @@ function initAppKit() {
     metadata: appMetadata,
     themeMode: "dark",
     themeVariables: {
-      "--w3m-accent": "#7c5cff",
+      "--w3m-accent": "#0500ff",
       "--w3m-border-radius-master": "4px",
     },
     features: { analytics: false },

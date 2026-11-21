@@ -130,7 +130,7 @@ export default function CreateWalletPage() {
               type="checkbox"
               checked={saved}
               onChange={(e) => setSaved(e.target.checked)}
-              className="mt-0.5 size-4 accent-[#7c5cff]"
+              className="mt-0.5 size-4 accent-[#0500ff]"
             />
             I saved my recovery phrase somewhere safe and offline, and I understand that losing it
             means losing access to my funds forever.

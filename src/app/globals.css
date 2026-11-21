@@ -1,29 +1,29 @@
 @import "tailwindcss";
 
 :root {
-  /* RS WALLET — dark-first design tokens (deep navy / black, violet + electric blue) */
-  --background: #05070d;
-  --foreground: #e7ebf4;
-  --card: #0b0f1c;
-  --card-foreground: #e7ebf4;
-  --popover: #0d1220;
-  --popover-foreground: #e7ebf4;
-  --primary: #7c5cff;
+  /* RS WALLET — Trust Wallet-style tokens (flat near-black, Trust blue #0500FF) */
+  --background: #060609;
+  --foreground: #f5f5f7;
+  --card: #101014;
+  --card-foreground: #f5f5f7;
+  --popover: #141419;
+  --popover-foreground: #f5f5f7;
+  --primary: #0500ff;
   --primary-foreground: #ffffff;
-  --secondary: #131a2e;
-  --secondary-foreground: #c6cede;
-  --muted: #10182b;
-  --muted-foreground: #8b96b0;
-  --accent: #2f81f7;
+  --secondary: #1b1b22;
+  --secondary-foreground: #d7d7e0;
+  --muted: #141419;
+  --muted-foreground: #8e8e99;
+  --accent: #3d7bff;
   --accent-foreground: #ffffff;
   --destructive: #f6465d;
   --destructive-foreground: #ffffff;
   --success: #16c784;
   --warning: #f0b90b;
-  --border: #1c2742;
-  --input: #1c2742;
-  --ring: #7c5cff;
-  --radius: 0.9rem;
+  --border: #22222c;
+  --input: #22222c;
+  --ring: #0500ff;
+  --radius: 1rem;
 }
 
 @theme inline {
@@ -60,37 +60,31 @@ html {
 }
 
 body {
-  background:
-    radial-gradient(1100px 500px at 85% -10%, rgba(124, 92, 255, 0.14), transparent 60%),
-    radial-gradient(900px 480px at -10% 110%, rgba(47, 129, 247, 0.12), transparent 60%),
-    var(--background);
-  background-attachment: fixed;
+  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
 
-/* Glass dashboard card */
+/* Flat Trust-style surface (kept under the .glass name used across pages) */
 .glass {
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02));
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  background: var(--card);
+  border: 1px solid var(--border);
 }
 
 .text-gradient {
-  background: linear-gradient(92deg, #a78bfa 0%, #7c5cff 45%, #2f81f7 100%);
+  background: linear-gradient(92deg, #6e63ff 0%, #0500ff 48%, #0091ff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .btn-gradient {
-  background: linear-gradient(92deg, #7c5cff, #2f81f7);
+  background: #0500ff;
   transition: filter 0.2s ease, transform 0.15s ease;
 }
 .btn-gradient:hover {
-  filter: brightness(1.12);
+  filter: brightness(1.25);
 }
 .btn-gradient:active {
   transform: translateY(1px);
@@ -99,14 +93,14 @@ body {
 /* Slim scrollbars */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #263356 transparent;
+  scrollbar-color: #2a2a35 transparent;
 }
 *::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 *::-webkit-scrollbar-thumb {
-  background: #263356;
+  background: #2a2a35;
   border-radius: 999px;
 }
 

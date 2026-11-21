@@ -172,7 +172,7 @@ export default function NetworksPage() {
                     type="checkbox"
                     checked={form.testnet}
                     onChange={(e) => set("testnet", e.target.checked)}
-                    className="size-4 accent-[#7c5cff]"
+                    className="size-4 accent-[#0500ff]"
                   />
                   This is a testnet
                 </label>
