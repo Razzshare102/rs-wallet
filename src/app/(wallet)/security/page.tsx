@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Check, Copy, Eye, EyeOff, Loader2, Lock, ShieldAlert, ShieldCheck, Trash2 } from "lucide-react";
+import { Check, Copy, Eye, EyeOff, Fingerprint, Loader2, Lock, ShieldAlert, ShieldCheck, Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/layout/ModulePlaceholder";
 import { ApprovalManager } from "@/components/wallet/ApprovalManager";
 import { PhraseGrid } from "@/components/wallet/Onboarding";
@@ -22,7 +22,139 @@ import {
 } from "@/components/ui/dialog";
 import { AUTOLOCK_OPTIONS, useVault } from "@/components/wallet/VaultProvider";
 import { changePassword } from "@/lib/wallet/vault";
+import {
+  disablePasskey,
+  enablePasskey,
+  hasPasskey,
+  passkeyBrowserSupported,
+  passkeyPlatformAvailable,
+} from "@/lib/passkey";
 import { cn } from "@/lib/utils";
+
+function PasskeyUnlock() {
+  const { verifyPassword } = useVault();
+  const [supported, setSupported] = useState<boolean | null>(null);
+  const [platform, setPlatform] = useState(false);
+  const [enabled, setEnabled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
+
+  useEffect(() => {
+    setEnabled(hasPasskey());
+    setSupported(passkeyBrowserSupported());
+    void passkeyPlatformAvailable().then(setPlatform);
+  }, []);
+
+  if (supported === null) return null;
+
+  if (!supported) {
+    return (
+      <p className="text-sm leading-relaxed text-muted-foreground">
+        This browser does not support passkeys, so passkey unlock is unavailable here. Your password
+        and recovery phrase work as usual.
+      </p>
+    );
+  }
+
+  const closeDialog = (next: boolean) => {
+    if (!next) {
+      setPassword("");
+      setError(null);
+    }
+    setOpen(next);
+  };
+
+  return (
+    <div className="flex flex-col gap-3">
+      <p className="text-sm leading-relaxed text-muted-foreground">
+        Unlock with Face ID, fingerprint or Windows Hello on this device instead of typing your
+        password. The passkey works only in this browser on this device — your password stays the
+        master backup, and changing your password turns passkey unlock off.
+        {!platform &&
+          " No built-in authenticator was detected here; a hardware security key may still work."}
+      </p>
+      {enabled ? (
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="default">Passkey on</Badge>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              disablePasskey();
+              setEnabled(false);
+              setNotice("Passkey unlock turned off on this device.");
+            }}
+          >
+            Turn off passkey unlock
+          </Button>
+        </div>
+      ) : (
+        <div>
+          <Button variant="secondary" onClick={() => setOpen(true)}>
+            <Fingerprint className="size-4" /> Set up passkey unlock
+          </Button>
+        </div>
+      )}
+      {notice && <p className="text-sm text-success">{notice}</p>}
+      <Dialog open={open} onOpenChange={closeDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Set up passkey unlock</DialogTitle>
+            <DialogDescription>
+              Verify your wallet password first, then your device will ask you to create a passkey
+              (Face ID, fingerprint, Windows Hello or a security key).
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="passkey-password">Wallet password</Label>
+            <Input
+              id="passkey-password"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Wallet password"
+            />
+            {error && <p className="text-sm font-medium text-destructive">{error}</p>}
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => closeDialog(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="gradient"
+              disabled={!password || busy}
+              onClick={async () => {
+                setBusy(true);
+                setError(null);
+                try {
+                  const ok = await verifyPassword(password);
+                  if (!ok) {
+                    setError("Incorrect password.");
+                    return;
+                  }
+                  await enablePasskey(password);
+                  setEnabled(true);
+                  setNotice("Passkey set up. Next time you can unlock with your passkey.");
+                  closeDialog(false);
+                } catch (err) {
+                  setError(err instanceof Error ? err.message : "Passkey setup failed.");
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            >
+              {busy ? <Loader2 className="size-4 animate-spin" /> : <Fingerprint className="size-4" />}
+              Verify &amp; create passkey
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
 
 function RevealPhrase() {
   const { verifyPassword, revealMnemonic, hasMnemonic } = useVault();
@@ -196,6 +328,7 @@ function ChangePassword() {
             setError(null);
             try {
               await changePassword(oldPw, newPw);
+              disablePasskey();
               lock();
               router.replace("/unlock");
             } catch {
@@ -211,7 +344,7 @@ function ChangePassword() {
       </div>
       <p className="text-xs leading-relaxed text-muted-foreground">
         Changing your password re-encrypts the vault on this device. It does not change your recovery
-        phrase or any account.
+        phrase or any account. Passkey unlock is turned off — set it up again with the new password.
       </p>
     </div>
   );
@@ -385,6 +518,17 @@ export default function SecurityPage() {
                   </p>
                 )}
               </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Fingerprint className="size-5 text-accent" /> Passkey unlock
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <PasskeyUnlock />
             </CardContent>
           </Card>
 

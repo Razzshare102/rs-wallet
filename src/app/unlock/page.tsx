@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Lock } from "lucide-react";
+import { Fingerprint, Loader2, Lock } from "lucide-react";
 import { OnboardingShell } from "@/components/wallet/Onboarding";
+import { hasPasskey, unlockWithPasskey } from "@/lib/passkey";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,6 +20,27 @@ export default function UnlockPage() {
   const [showReset, setShowReset] = useState(false);
   const [resetConfirmed, setResetConfirmed] = useState(false);
   const [resetting, setResetting] = useState(false);
+  const [passkeyReady, setPasskeyReady] = useState(false);
+  const [passkeyBusy, setPasskeyBusy] = useState(false);
+
+  useEffect(() => {
+    setPasskeyReady(hasPasskey());
+  }, []);
+
+  const onPasskeyUnlock = async () => {
+    if (passkeyBusy) return;
+    setPasskeyBusy(true);
+    setError(null);
+    try {
+      const storedPassword = await unlockWithPasskey();
+      await unlock(storedPassword);
+      router.replace("/dashboard");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Passkey unlock failed. Use your password instead.");
+    } finally {
+      setPasskeyBusy(false);
+    }
+  };
 
   useEffect(() => {
     if (status === "unlocked") router.replace("/dashboard");
@@ -68,6 +90,24 @@ export default function UnlockPage() {
           {busy ? <Loader2 className="size-4 animate-spin" /> : <Lock className="size-4" />}
           Unlock wallet
         </Button>
+        {passkeyReady && (
+          <>
+            <div className="flex items-center gap-3 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+              <span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" />
+            </div>
+            <Button
+              type="button"
+              variant="secondary"
+              size="lg"
+              className="w-full"
+              disabled={passkeyBusy || busy}
+              onClick={onPasskeyUnlock}
+            >
+              {passkeyBusy ? <Loader2 className="size-4 animate-spin" /> : <Fingerprint className="size-4" />}
+              Unlock with passkey
+            </Button>
+          </>
+        )}
         <p className="text-center text-xs leading-relaxed text-muted-foreground">
           Forgot your password? RS WALLET cannot reset it — the password only exists in your head.
           You can restore access with your recovery phrase by resetting the wallet below.
