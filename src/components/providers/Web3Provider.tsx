@@ -8,11 +8,16 @@ import { appKitNetworks, appMetadata, projectId, wagmiAdapter } from "@/config/w
 import { wagmiConfig } from "@/config/wagmi";
 import { hasReownProjectId } from "@/lib/env";
 
-// Initialize AppKit exactly once, and only when a Project ID exists.
-// Injected wallets (MetaMask, Rabby, Coinbase) work through wagmi either way.
+// Initialize AppKit exactly once at module scope, and only when a Project
+// ID exists. This must also run during SSR/prerender: pages render the
+// AppKit connect button on the server, and its `useAppKit` hook throws if
+// no AppKit instance exists yet. `createAppKit` itself is SSR-safe (it is
+// how Reown's own Next.js integration initializes), so there is no window
+// gate here. Injected wallets (MetaMask, Rabby, Coinbase) work through
+// wagmi either way.
 let appKitInitialized = false;
 function initAppKit() {
-  if (appKitInitialized || typeof window === "undefined") return;
+  if (appKitInitialized) return;
   appKitInitialized = true;
   if (!hasReownProjectId) return;
   createAppKit({
