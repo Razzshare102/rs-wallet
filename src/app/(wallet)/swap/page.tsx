@@ -169,6 +169,10 @@ export default function SwapPage() {
   const notConfigured = quoteQuery.data?.notConfigured ?? false;
 
   const buyFormatted = quote && buy ? trimNumber(formatUnits(BigInt(quote.buyAmount), buy.decimals)) : null;
+  const feeFormatted =
+    quote?.integratorFee && sell
+      ? trimNumber(formatUnits(BigInt(quote.integratorFee.amount), sell.decimals))
+      : null;
   const minReceivedFormatted =
     quote && buy
       ? trimNumber(formatUnits(minReceived(quote.buyAmount, slippageBps), buy.decimals))
@@ -542,6 +546,12 @@ export default function SwapPage() {
                   </dd>
                 </div>
                 <div className="flex justify-between">
+                  <dt className="text-muted-foreground">RS WALLET fee (1%)</dt>
+                  <dd className="font-medium">
+                    {feeFormatted ? `${feeFormatted} ${sell?.symbol}` : "Included in quote"}
+                  </dd>
+                </div>
+                <div className="flex justify-between">
                   <dt className="text-muted-foreground">Route contract</dt>
                   <dd className="font-mono text-xs">{shortenAddress(quote.transaction.to, 6)}</dd>
                 </div>
@@ -642,8 +652,8 @@ export default function SwapPage() {
 
       <p className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
         <Badge variant="outline">0x aggregator</Badge>
-        Quotes are live from 0x across its liquidity sources on this network. RS WALLET adds no
-        fee on top.
+        Quotes are live from 0x across its liquidity sources on this network. A 1% RS WALLET
+        fee is included in every quote and shown above before you sign.
       </p>
     </div>
   );

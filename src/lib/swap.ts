@@ -11,9 +11,21 @@ import type { Address, Hash } from "viem";
  * an error instead of offering a signable transaction.
  */
 
+/**
+ * RS WALLET swap fee: 1% of the sell amount, collected by 0x on every
+ * swap and paid to the owner's wallet (set by Razz, 2026-11-21). The
+ * fee is part of the quote the user reviews before signing — never
+ * hidden, never added after the fact. The recipient can be overridden
+ * with the server env var SWAP_FEE_RECIPIENT.
+ */
+export const SWAP_FEE_BPS = 100; // 1%
+export const SWAP_FEE_RECIPIENT: Address = "0x0138Fd2dF24f241A8dFF555B802EA595ed8bE1A2";
+
 export interface SwapQuote {
   sellAmount: string; // base units
   buyAmount: string; // base units
+  /** Integrator (RS WALLET) fee taken from the sell token, base units. */
+  integratorFee: { amount: string; token: Address } | null;
   allowanceSpender: Address | null;
   allowanceActual: string | null; // base units currently approved
   transaction: {
@@ -28,6 +40,7 @@ export interface SwapQuote {
 interface RawQuote {
   buyAmount?: unknown;
   sellAmount?: unknown;
+  fees?: { integratorFee?: { amount?: unknown; token?: unknown } | null } | null;
   totalNetworkFee?: { amountUsd?: unknown } | null;
   issues?: { allowance?: { actual?: unknown; spender?: unknown } | null } | null;
   transaction?: { to?: unknown; data?: unknown; value?: unknown; gas?: unknown } | null;
@@ -58,9 +71,13 @@ export function normalizeZeroExQuote(raw: unknown): SwapQuote {
     throw new Error("The aggregator returned an incomplete quote. Please try again.");
   }
   const allowance = quote.issues?.allowance ?? null;
+  const rawFee = quote.fees?.integratorFee ?? null;
+  const feeAmount = rawFee ? asString(rawFee.amount) : null;
+  const feeToken = rawFee ? asAddress(rawFee.token) : null;
   return {
     sellAmount,
     buyAmount,
+    integratorFee: feeAmount && feeToken ? { amount: feeAmount, token: feeToken } : null,
     allowanceSpender: allowance ? asAddress(allowance.spender) : null,
     allowanceActual: allowance ? asString(allowance.actual) : null,
     transaction: {

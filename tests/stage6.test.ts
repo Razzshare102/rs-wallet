@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { minReceived, normalizeZeroExQuote } from "../src/lib/swap";
+import { minReceived, normalizeZeroExQuote, SWAP_FEE_BPS, SWAP_FEE_RECIPIENT } from "../src/lib/swap";
 import { COINGECKO_PLATFORMS, NATIVE_COINGECKO_IDS, usdValue } from "../src/lib/prices";
 
 const SPENDER = "0x000000000022D473030F116dDEE9F6B43aC78BA3";
@@ -38,6 +38,16 @@ describe("normalizeZeroExQuote", () => {
     expect(() => normalizeZeroExQuote(rawQuote({ liquidityAvailable: false }))).toThrow(
       /No liquidity/,
     );
+  });
+
+  it("parses the 1% integrator fee and defaults to null without one", () => {
+    expect(normalizeZeroExQuote(rawQuote()).integratorFee).toBeNull();
+    const q = normalizeZeroExQuote(
+      rawQuote({ fees: { integratorFee: { amount: "10000000000000000", token: ROUTER, type: "integrator" } } }),
+    );
+    expect(q.integratorFee).toEqual({ amount: "10000000000000000", token: ROUTER });
+    expect(SWAP_FEE_BPS).toBe(100);
+    expect(SWAP_FEE_RECIPIENT).toBe("0x0138Fd2dF24f241A8dFF555B802EA595ed8bE1A2");
   });
 
   it("allows a null allowance (native sell needs none)", () => {

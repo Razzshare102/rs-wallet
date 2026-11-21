@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { isAddress } from "viem";
 import { z } from "zod";
-import { normalizeZeroExQuote } from "@/lib/swap";
+import { normalizeZeroExQuote, SWAP_FEE_BPS, SWAP_FEE_RECIPIENT } from "@/lib/swap";
 
 /**
  * GET /api/swap/quote?chainId=&sellToken=&buyToken=&sellAmount=&taker=&slippageBps=
@@ -9,6 +9,10 @@ import { normalizeZeroExQuote } from "@/lib/swap";
  * Proxies the 0x Swap API (allowance-holder, v2) with the server-only
  * ZEROX_API_KEY. Token addresses may be the literal "native" for the
  * chain's gas token (mapped to the 0x convention 0xEeee…EEeE).
+ *
+ * Every quote carries the RS WALLET swap fee (SWAP_FEE_BPS = 1% of the
+ * sell amount, paid by 0x to SWAP_FEE_RECIPIENT / the SWAP_FEE_RECIPIENT
+ * env override). The fee is inside the quote the user reviews.
  *
  * Without a key the route returns 503 { error: "not_configured" } and
  * the Swap page explains exactly how to configure it — swaps are never
@@ -73,13 +77,21 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "same_token" }, { status: 400 });
   }
 
+  const sellTokenResolved = q.sellToken === "native" ? NATIVE_PSEUDO : q.sellToken;
+  const feeRecipientEnv = process.env.SWAP_FEE_RECIPIENT;
+  const feeRecipient = feeRecipientEnv && isAddress(feeRecipientEnv) ? feeRecipientEnv : SWAP_FEE_RECIPIENT;
   const params = new URLSearchParams({
     chainId: String(q.chainId),
-    sellToken: q.sellToken === "native" ? NATIVE_PSEUDO : q.sellToken,
+    sellToken: sellTokenResolved,
     buyToken: q.buyToken === "native" ? NATIVE_PSEUDO : q.buyToken,
     sellAmount: q.sellAmount,
     taker: q.taker,
     slippageBps: String(q.slippageBps),
+    // RS WALLET fee: 1% of the sell amount, collected by 0x into the
+    // owner's wallet. Included in the quote the user reviews and signs.
+    swapFeeRecipient: feeRecipient,
+    swapFeeBps: String(SWAP_FEE_BPS),
+    swapFeeToken: sellTokenResolved,
   });
 
   try {
