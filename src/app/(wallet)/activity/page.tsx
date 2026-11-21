@@ -49,15 +49,11 @@ export default function ActivityPage() {
         <Card>
           <CardContent className="flex flex-col items-center gap-3 p-10 text-center">
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
-              No active account. Unlock the built-in wallet or connect an external wallet to see
-              its transaction history.
+              No active account. Unlock the built-in wallet to see its transaction history.
             </p>
             <div className="flex gap-2">
               <Button asChild variant="gradient">
                 <Link href="/unlock">Unlock wallet</Link>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/">Connect external</Link>
               </Button>
             </div>
           </CardContent>

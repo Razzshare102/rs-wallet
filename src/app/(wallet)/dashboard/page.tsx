@@ -114,9 +114,9 @@ export default function DashboardPage() {
         <CardContent className="flex flex-col items-center px-6 py-14 text-center">
           <h2 className="text-xl font-semibold">No wallet active</h2>
           <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
-            Create a built-in wallet, import one with your recovery phrase, or connect an external
-            wallet to see real balances here. Nothing is displayed until an account is active —
-            RS WALLET never shows fabricated data.
+            Create a built-in wallet or import one with your recovery phrase to see real balances
+            here. Nothing is displayed until an account is active — RS WALLET never shows
+            fabricated data.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-2">
             <Button asChild variant="gradient">
@@ -124,9 +124,6 @@ export default function DashboardPage() {
             </Button>
             <Button asChild variant="outline">
               <Link href="/import">Import wallet</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link href="/">Connect external</Link>
             </Button>
           </div>
         </CardContent>

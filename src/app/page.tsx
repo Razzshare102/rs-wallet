@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, KeyRound, ShieldCheck, Wallet, Globe2, ArrowLeftRight, Lock } from "lucide-react";
+import { ArrowRight, KeyRound, ShieldCheck, Globe2, ArrowLeftRight, Lock } from "lucide-react";
 import { RSLogo } from "@/components/brand/RSLogo";
 import { Button } from "@/components/ui/button";
 import { SUPPORTED_NETWORKS } from "@/lib/chains";
-import { ConnectButton } from "@/components/wallet/ConnectButton";
 import { BuiltinChip } from "@/components/wallet/BuiltinChip";
 import { ChainProvider } from "@/components/wallet/ChainProvider";
 
@@ -49,7 +48,6 @@ export default function LandingPage() {
               <Link href="/security">Security</Link>
             </Button>
             <BuiltinChip />
-            <ConnectButton />
           </div>
         </header>
 
@@ -69,14 +67,14 @@ export default function LandingPage() {
             transition={{ duration: 0.5, delay: 0.16 }}
             className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg"
           >
-            Create your own encrypted wallet on this device, or connect MetaMask, Rabby, Coinbase
-            Wallet or any WalletConnect wallet. Non-custodial — always.
+            Create your own encrypted wallet on this device — a 12-word recovery phrase,
+            encrypted with your password. Non-custodial — always.
           </motion.p>
 
           <motion.div
             {...fadeUp}
             transition={{ duration: 0.5, delay: 0.24 }}
-            className="mt-10 grid w-full max-w-3xl gap-4 sm:grid-cols-2"
+            className="mt-10 w-full max-w-xl"
           >
             <div className="glass rounded-3xl p-6 text-left">
               <span className="flex size-11 items-center justify-center rounded-2xl bg-primary/15 text-primary">
@@ -96,25 +94,12 @@ export default function LandingPage() {
                 <Button asChild variant="outline">
                   <Link href="/import">Import</Link>
                 </Button>
-              </div>
-            </div>
-
-            <div className="glass rounded-3xl p-6 text-left">
-              <span className="flex size-11 items-center justify-center rounded-2xl bg-accent/15 text-accent">
-                <Wallet className="size-5" />
-              </span>
-              <h2 className="mt-4 text-lg font-semibold">External wallet</h2>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                Connect MetaMask, Rabby, Coinbase Wallet or WalletConnect. Your external wallet keeps
-                its own keys and signs everything itself.
-              </p>
-              <div className="mt-5 flex flex-wrap items-center gap-2">
-                <ConnectButton />
                 <Button asChild variant="outline">
                   <Link href="/dashboard">Open dashboard</Link>
                 </Button>
               </div>
             </div>
+
           </motion.div>
 
           <motion.div

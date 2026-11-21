@@ -29,7 +29,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useVault, type AccountInfo } from "@/components/wallet/VaultProvider";
-import { ConnectButton } from "@/components/wallet/ConnectButton";
 import { useRsChain } from "@/components/wallet/ChainProvider";
 import { isValidPrivateKey } from "@/lib/wallet/accounts";
 import { shortenAddress } from "@/lib/utils";
@@ -40,14 +39,18 @@ function ExternalWalletCard() {
   const { disconnect } = useDisconnect();
   const { network } = useRsChain();
 
+  // RS WALLET is a standalone built-in wallet — there is no connect flow.
+  // This card only appears if a wallet was connected through an older
+  // version, so it can be reviewed and disconnected.
+  if (!isConnected || !address) return null;
+
   return (
     <Card className="mt-4">
       <CardHeader>
         <CardTitle className="text-base">External wallet</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
-        {isConnected && address ? (
-          <>
+        <>
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="default">Connected</Badge>
               <Badge variant="secondary">{connector?.name ?? "External wallet"}</Badge>
@@ -66,17 +69,6 @@ function ExternalWalletCard() {
               </Button>
             </div>
           </>
-        ) : (
-          <>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              No external wallet connected. Connect MetaMask, Rabby, Coinbase Wallet or any
-              WalletConnect wallet — it keeps its own keys and signs everything itself.
-            </p>
-            <div>
-              <ConnectButton />
-            </div>
-          </>
-        )}
       </CardContent>
     </Card>
   );

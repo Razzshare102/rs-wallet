@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(appUrl),
   title: "RS WALLET — Non-custodial EVM Wallet",
   description:
-    "RS WALLET is a non-custodial EVM wallet. Create or import your own wallet, or connect MetaMask, Rabby, Coinbase Wallet and WalletConnect wallets across 8 networks.",
+    "RS WALLET is a non-custodial EVM wallet. Create or import your own wallet across 8 networks — your keys never leave your device.",
   applicationName: "RS WALLET",
   authors: [{ name: "RS WALLET" }],
   keywords: ["EVM wallet", "non-custodial", "Web3", "Ethereum", "BNB Chain", "RS WALLET"],
@@ -28,14 +28,14 @@ export const metadata: Metadata = {
     siteName: "RS WALLET",
     title: "RS WALLET — Non-custodial EVM Wallet",
     description:
-      "Create or import your own wallet, or connect MetaMask, Rabby, Coinbase Wallet and WalletConnect across 8 EVM networks. Your keys never leave your device.",
+      "Create or import your own wallet across 8 EVM networks. Your keys never leave your device.",
     url: appUrl,
   },
   twitter: {
     card: "summary_large_image",
     title: "RS WALLET — Non-custodial EVM Wallet",
     description:
-      "Create or import your own wallet, or connect MetaMask, Rabby, Coinbase Wallet and WalletConnect across 8 EVM networks. Your keys never leave your device.",
+      "Create or import your own wallet across 8 EVM networks. Your keys never leave your device.",
   },
 };
 

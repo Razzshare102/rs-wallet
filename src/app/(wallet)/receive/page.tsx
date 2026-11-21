@@ -81,8 +81,7 @@ export default function ReceivePage() {
         <Card>
           <CardContent className="flex flex-col items-center gap-3 p-10 text-center">
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
-              No active account. Unlock the built-in wallet or connect an external wallet to get your
-              receiving address.
+              No active account. Unlock the built-in wallet to get your receiving address.
             </p>
             <div className="flex gap-2">
               <Button asChild variant="gradient">

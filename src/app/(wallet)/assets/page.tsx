@@ -162,8 +162,7 @@ export default function AssetsPage() {
         <Card>
           <CardContent className="flex flex-col items-center gap-3 p-10 text-center">
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
-              No active account. Create or unlock the built-in wallet, or connect an external wallet to
-              see real balances.
+              No active account. Create or unlock the built-in wallet to see real balances.
             </p>
             <div className="flex gap-2">
               <Button asChild variant="gradient">

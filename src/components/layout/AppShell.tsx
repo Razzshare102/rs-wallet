@@ -19,7 +19,6 @@ import {
 import { useAccount } from "wagmi";
 import { RSLogo } from "@/components/brand/RSLogo";
 import { NetworkSelector } from "@/components/wallet/NetworkSelector";
-import { ConnectButton } from "@/components/wallet/ConnectButton";
 import { BuiltinChip } from "@/components/wallet/BuiltinChip";
 import { ChainProvider, useRsChain } from "@/components/wallet/ChainProvider";
 import { cn } from "@/lib/utils";
@@ -149,7 +148,6 @@ export function AppShell({ children }: { children: ReactNode }) {
             <div className="flex items-center gap-2.5">
               <NetworkSelector />
               <BuiltinChip />
-              <ConnectButton />
             </div>
           </header>
 

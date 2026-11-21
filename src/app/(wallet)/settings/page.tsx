@@ -1,12 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { CheckCircle2, Info, ShieldCheck, TriangleAlert } from "lucide-react";
+import { Info, ShieldCheck } from "lucide-react";
 import { PageHeader } from "@/components/layout/ModulePlaceholder";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { hasReownProjectId } from "@/lib/env";
 import { SUPPORTED_NETWORKS } from "@/lib/chains";
 
 const RPC_OVERRIDE_IDS = [1, 56, 137, 42161, 10, 8453, 43114, 11155111];
@@ -29,59 +27,6 @@ export default function SettingsPage() {
       <PageHeader title="Settings" subtitle="App configuration and status. No secrets are ever shown here." />
 
       <div className="flex flex-col gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">WalletConnect (Reown AppKit)</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-3">
-            {hasReownProjectId ? (
-              <>
-                <p className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="size-4 text-success" />
-                  <span className="font-medium">Configured.</span>
-                  <Badge variant="secondary">Project ID present</Badge>
-                </p>
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  The connect modal offers MetaMask, Rabby, Coinbase Wallet, WalletConnect QR and
-                  hundreds of other wallets.
-                </p>
-              </>
-            ) : (
-              <>
-                <p className="flex items-center gap-2 text-sm">
-                  <TriangleAlert className="size-4 text-warning" />
-                  <span className="font-medium">Not configured.</span>
-                  <Badge variant="warning">Action needed</Badge>
-                </p>
-                <div className="text-sm leading-relaxed text-muted-foreground">
-                  <p>
-                    WalletConnect requires a free Reown Project ID. Injected wallets (MetaMask, Rabby,
-                    Coinbase) still work without it. To enable WalletConnect:
-                  </p>
-                  <ol className="mt-2 list-decimal space-y-1 pl-5">
-                    <li>
-                      Create a project at{" "}
-                      <a
-                        href="https://cloud.reown.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-medium text-foreground underline underline-offset-2"
-                      >
-                        cloud.reown.com
-                      </a>
-                      .
-                    </li>
-                    <li>
-                      Set <code className="rounded bg-secondary px-1.5 py-0.5 font-mono text-xs">NEXT_PUBLIC_REOWN_PROJECT_ID</code>{" "}
-                      in the app environment (Vercel → Project → Settings → Environment Variables).
-                    </li>
-                    <li>Redeploy, then reload this page.</li>
-                  </ol>
-                </div>
-              </>
-            )}
-          </CardContent>
-        </Card>
 
         <Card>
           <CardHeader>
