@@ -160,7 +160,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-28 pt-6 sm:px-6 lg:pb-10">{children}</main>
 
           {/* Mobile bottom tabs — Trust Wallet style, Swap raised in the centre */}
-          <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/95 backdrop-blur-xl lg:hidden">
+          <nav className="tg-safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/95 backdrop-blur-xl lg:hidden">
             <div className="mx-auto grid max-w-md grid-cols-5">
               {MOBILE_TABS.map(({ href, label, icon: Icon }) => {
                 const active = isActive(href);

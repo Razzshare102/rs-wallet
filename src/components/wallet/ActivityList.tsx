@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import type { StoredTx, TxKind } from "@/lib/activity";
 import type { ResolvedNetwork } from "@/lib/chains";
 import { explorerTxUrlFor } from "@/lib/chains";
+import { interceptExternalLink } from "@/lib/telegram";
 import { shortenAddress } from "@/lib/utils";
 
 const KIND_ICON: Record<TxKind, typeof ArrowUpFromLine> = {
@@ -113,6 +114,9 @@ export function ActivityList({
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    if (interceptExternalLink(url)) e.preventDefault();
+                  }}
                   className="rounded-full p-1 text-muted-foreground transition-colors hover:text-foreground"
                   aria-label="View transaction on block explorer"
                 >

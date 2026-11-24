@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { useRsChain } from "@/components/wallet/ChainProvider";
 import type { CustomNetworkForm } from "@/lib/customChains";
 import type { ResolvedNetwork } from "@/lib/chains";
+import { interceptExternalLink } from "@/lib/telegram";
 
 const EMPTY_FORM: CustomNetworkForm = {
   name: "",
@@ -26,6 +27,7 @@ const EMPTY_FORM: CustomNetworkForm = {
 function NetworkRow({ net }: { net: ResolvedNetwork }) {
   const { chainId, setChainId, removeCustomNetwork } = useRsChain();
   const active = net.chainId === chainId;
+  const explorerUrl = net.explorerUrl;
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-card/60 px-4 py-3.5">
       <span className="size-3 rounded-full" style={{ backgroundColor: net.color }} aria-hidden />
@@ -41,9 +43,16 @@ function NetworkRow({ net }: { net: ResolvedNetwork }) {
         </p>
       </div>
       <div className="flex items-center gap-1">
-        {net.explorerUrl && (
+        {explorerUrl && (
           <Button asChild variant="ghost" size="sm">
-            <a href={net.explorerUrl} target="_blank" rel="noopener noreferrer">
+            <a
+              href={explorerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => {
+                if (interceptExternalLink(explorerUrl)) e.preventDefault();
+              }}
+            >
               <ExternalLink className="size-4" /> Explorer
             </a>
           </Button>

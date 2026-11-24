@@ -24,7 +24,8 @@ export default function UnlockPage() {
   const [passkeyBusy, setPasskeyBusy] = useState(false);
 
   useEffect(() => {
-    setPasskeyReady(hasPasskey());
+    // Deferred past mount so the first client render still matches SSR.
+    queueMicrotask(() => setPasskeyReady(hasPasskey()));
   }, []);
 
   const onPasskeyUnlock = async () => {

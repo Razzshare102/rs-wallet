@@ -43,8 +43,12 @@ function PasskeyUnlock() {
   const [notice, setNotice] = useState<string | null>(null);
 
   useEffect(() => {
-    setEnabled(hasPasskey());
-    setSupported(passkeyBrowserSupported());
+    // Deferred past mount so the first client render still matches SSR
+    // (supported === null renders nothing) — no hydration mismatch.
+    queueMicrotask(() => {
+      setEnabled(hasPasskey());
+      setSupported(passkeyBrowserSupported());
+    });
     void passkeyPlatformAvailable().then(setPlatform);
   }, []);
 

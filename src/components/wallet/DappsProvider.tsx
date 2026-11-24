@@ -87,9 +87,12 @@ export function DappsProvider({ children }: { children: ReactNode }) {
   const clientRef = useRef<WcClient | null>(null);
   const initPromiseRef = useRef<Promise<void> | null>(null);
   const vaultRef = useRef(vault);
-  vaultRef.current = vault;
   const chainRef = useRef(rsChain);
-  chainRef.current = rsChain;
+  // Keep the refs in sync after commit (never assign refs during render).
+  useEffect(() => {
+    vaultRef.current = vault;
+    chainRef.current = rsChain;
+  });
 
   const refreshSessions = useCallback(() => {
     const client = clientRef.current;

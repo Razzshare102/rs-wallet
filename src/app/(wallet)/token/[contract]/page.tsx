@@ -17,6 +17,7 @@ import { useActivity } from "@/hooks/useActivity";
 import { usePrices } from "@/hooks/usePrices";
 import { ActivityList } from "@/components/wallet/ActivityList";
 import { usdValue } from "@/lib/prices";
+import { interceptExternalLink } from "@/lib/telegram";
 import { formatUsd } from "@/lib/utils";
 import { explorerAddressUrlFor } from "@/lib/chains";
 
@@ -163,6 +164,9 @@ export default function TokenDetailsPage({
                       href={explorerUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={(e) => {
+                        if (interceptExternalLink(explorerUrl)) e.preventDefault();
+                      }}
                       className="rounded-full p-1 text-muted-foreground hover:text-foreground"
                       aria-label="View contract on block explorer"
                     >

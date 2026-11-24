@@ -13,6 +13,7 @@ import { useVault } from "@/components/wallet/VaultProvider";
 import { hasReownProjectId } from "@/lib/env";
 import { getNetwork } from "@/lib/chains";
 import { parseWcChainId } from "@/lib/walletconnect";
+import { interceptExternalLink } from "@/lib/telegram";
 
 const POPULAR_DAPPS = [
   { name: "Uniswap", url: "https://app.uniswap.org", blurb: "Swap tokens on Ethereum, Base, BNB Chain and more." },
@@ -205,6 +206,9 @@ export default function DappsPage() {
                   href={d.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    if (interceptExternalLink(d.url)) e.preventDefault();
+                  }}
                   className="group rounded-3xl border border-border bg-card p-5 transition-colors hover:border-accent/50"
                 >
                   <span className="flex items-center justify-between">

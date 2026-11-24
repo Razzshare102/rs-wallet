@@ -22,6 +22,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useActiveAccount } from "@/hooks/useActiveAccount";
 import { useRsChain } from "@/components/wallet/ChainProvider";
+import { interceptExternalLink } from "@/lib/telegram";
 import { useBalances, trimNumber } from "@/hooks/useBalances";
 import { useTokenList } from "@/hooks/useTokenList";
 import { useVault } from "@/components/wallet/VaultProvider";
@@ -353,7 +354,14 @@ export default function SwapPage() {
             <div className="mt-6 flex flex-wrap justify-center gap-2">
               {url && (
                 <Button asChild variant="secondary">
-                  <a href={url} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                      if (interceptExternalLink(url)) e.preventDefault();
+                    }}
+                  >
                     <ExternalLink className="size-4" /> View on explorer
                   </a>
                 </Button>

@@ -57,6 +57,8 @@
 
 html {
   color-scheme: dark;
+  /* No pull-to-refresh / bounce inside the Telegram Mini App webview. */
+  overscroll-behavior: none;
 }
 
 body {
@@ -64,6 +66,27 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  /* Telegram safe-area insets (0 in a plain browser, so no visual change). */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/*
+ * Telegram Mini App viewport: TelegramProvider sets
+ * --tg-viewport-stable-height from WebApp.viewportStableHeight when inside
+ * Telegram; falls back to 100dvh in a plain browser.
+ */
+.tg-viewport {
+  min-height: var(--tg-viewport-stable-height, 100dvh);
+}
+
+/* Bottom-anchored chrome (e.g. the mobile bottom nav) clears the home indicator. */
+.tg-safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* Flat Trust-style surface (kept under the .glass name used across pages) */
